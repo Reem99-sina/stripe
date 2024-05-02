@@ -4,8 +4,8 @@ const { requestStripe } = require("./stripeConnect");
 const app=express()
 require('dotenv').config();
 app.use(express.json())
-connectdb()
+// connectdb()
 app.post("/payment-sheet",requestStripe)
-app.listen(3400,()=>{
+app.listen(3500,()=>{
     console.log("app listen")
 })
