@@ -1,7 +1,6 @@
 const stripe = require('stripe')('sk_test_51OnViJJ1yUQMPxwpErpKeSZvui63SFlcm56shrG1VppIqiFaI599PnD97FIslDEpTUOm1XDCnLuSx9jmSYSbI6r8009mXCzd01');
 module.exports.requestStripe=async(req,res)=>{
     const customer = await stripe.customers.create();
-    console.log(customer,"ephemeralKey")
   const ephemeralKey = await stripe.ephemeralKeys.create(
     {customer: customer.id},
     {apiVersion: '2024-04-10'}
@@ -24,11 +23,17 @@ module.exports.requestStripe=async(req,res)=>{
   });
   
 }
+const calculateOrderAmount = items => {
+  // Replace this constant with a calculation of the order's amount
+  // Calculate the order total on the server to prevent
+  // people from directly manipulating the amount on the client
+  return items;
+};
 module.exports.createPaymentIntent=async (req, res) => {
   const { items } = req.body;
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
+    amount: items,
     currency: "usd"
   });
 
