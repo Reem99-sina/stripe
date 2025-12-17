@@ -6,6 +6,12 @@ const bcrypt = require("bcrypt");
 module.exports.signup = async (req, res) => {
   try {
     const { name, email, password, phone, address } = req.body;
+    const isEmailExist = await userModel.findOne({ email });
+    if (isEmailExist) {
+      return res.status(409).json({
+        message: "Email already exists",
+      });
+    }
     const user = new userModel({ name, email, password, phone, address });
     const saveUser = await user.save();
     const token = jwt.sign({ id: saveUser._id }, process.env.jwtemail, {
